@@ -14,18 +14,25 @@ class TaskController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
+        $validated = $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
+            'status' => 'required|string',
         ]);
-
-        $task = Task::create($request->only('title', 'description'));
-
+    
+        // Create the task and associate it with the authenticated user
+        $task = auth()->user()->tasks()->create($validated);
+    
         return response()->json($task, 201);
     }
 
     public function update(Request $request, Task $task)
     {
+
+        if ($task->user_id !== auth()->id()) {
+            return response()->json(['message' => 'Unauthorized'], 403);
+        }
+
         $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
@@ -38,6 +45,9 @@ class TaskController extends Controller
 
     public function destroy(Task $task)
     {
+        if ($task->user_id !== auth()->id()) {
+            return response()->json(['message' => 'Unauthorized'], 403);
+        }
         $task->delete();
 
         return response()->json(null, 204);
