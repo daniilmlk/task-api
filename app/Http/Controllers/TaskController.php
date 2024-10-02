@@ -17,7 +17,6 @@ class TaskController extends Controller
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'status' => 'required|string',
         ]);
     
         // Create the task and associate it with the authenticated user

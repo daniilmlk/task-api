@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Task extends Model
 {
@@ -11,7 +12,7 @@ class Task extends Model
 
     // Define which attributes are mass assignable
     protected $fillable = [
-        'title', 'description', 'status', 'user_id',
+        'title', 'description', 'user_id',
     ];
 
     // A task belongs to a user
